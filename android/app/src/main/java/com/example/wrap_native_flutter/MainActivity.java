@@ -37,6 +37,11 @@ public class MainActivity extends FlutterActivity {
                             }
                         }
                 );
+
+        flutterEngine
+                .getPlatformViewsController()
+                .getRegistry()
+                .registerViewFactory("com.example.native_view_example.FirstWidgetPlugin", new NativeViewFactory());
     }
 
     private int getBatteryLevel() {

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter/services.dart';
 
+import 'native_view_example.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -55,13 +57,25 @@ class _MyHomePageState extends State<MyHomePage> {
     return Material(
       child: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
               onPressed: _getBatteryLevel,
               child: const Text('Get Battery Level'),
             ),
             Text(_batteryLevel),
+            Card(
+              child: SizedBox(
+                height: 200,
+                child: FirstWidget(),
+              ),
+            ),
+            Card(
+              child: SizedBox(
+                height: 200,
+                child: FirstWidget(),
+              ),
+            )
           ],
         ),
       ),
