@@ -38,6 +38,30 @@ class _MyHomePageState extends State<MyHomePage> {
   // Get battery level.
   String _batteryLevel = 'Unknown battery level.';
 
+  // Event channel
+  static const stream = const EventChannel('com.example.wrap_native_flutter/stream');
+
+  late StreamSubscription _streamSubscription;
+  double _currentValue = 0.0;
+
+  void _startListener() {
+    _streamSubscription = stream.receiveBroadcastStream().listen(_listenStream);
+  }
+
+  void _cancelListener() {
+    _streamSubscription.cancel();
+    setState(() {
+      _currentValue = 0;
+    });
+  }
+
+  void _listenStream(value) {
+    debugPrint("Received From Native:  $value\n");
+    setState(() {
+      _currentValue = value;
+    });
+  }
+
   Future<void> _getBatteryLevel() async {
     String batteryLevel;
     try {
@@ -64,18 +88,51 @@ class _MyHomePageState extends State<MyHomePage> {
               child: const Text('Get Battery Level'),
             ),
             Text(_batteryLevel),
-            Card(
-              child: SizedBox(
-                height: 200,
-                child: FirstWidget(),
+            // Card(
+            //   child: SizedBox(
+            //     height: 200,
+            //     child: FirstWidget(),
+            //   ),
+            // ),
+            // Card(
+            //   child: SizedBox(
+            //     height: 200,
+            //     child: FirstWidget(),
+            //   ),
+            // ),
+            //Progress bar
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: LinearProgressIndicator(
+                value: _currentValue,
+                backgroundColor: Colors.blue.shade50,
               ),
             ),
-            Card(
-              child: SizedBox(
-                height: 200,
-                child: FirstWidget(),
-              ),
-            )
+            const SizedBox(
+              height: 5,
+            ),
+
+            // Value in text
+            Text("Received Stream From Native:  $_currentValue".toUpperCase(),
+                textAlign: TextAlign.justify),
+            const SizedBox(
+              height: 50,
+            ),
+
+            //Start Btn
+            TextButton(
+              onPressed: () => _startListener(),
+              child: Text("Start Counter".toUpperCase()),
+            ),
+            const SizedBox(
+              height: 50,
+            ),
+
+            //Cancel Btn
+            TextButton(
+              onPressed: () => _cancelListener(),
+              child: Text("Cancel Counter".toUpperCase()),
+            ),
           ],
         ),
       ),
